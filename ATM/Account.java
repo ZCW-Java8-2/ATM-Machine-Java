@@ -12,7 +12,7 @@ public class Account {
 	// variables
 	private int customerNumber;
 	private int pinNumber;
-	private double checkingBalance = 0;
+	private double checkingBalance;
 	private double savingBalance = 0;
 	private FileWriter fileWriter;
 	private PrintWriter printWriter;
