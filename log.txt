@@ -1,0 +1,2 @@
+2022-11-27 01:39:40 Account 123 has deposit $10000.0 from Checking Account.
+2022-11-27 01:39:40 Account 123 has transfer $2000.0 from Checking Account.
