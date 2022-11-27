@@ -1,4 +1,10 @@
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -8,6 +14,11 @@ public class Account {
 	private int pinNumber;
 	private double checkingBalance = 0;
 	private double savingBalance = 0;
+	private FileWriter fileWriter;
+	private PrintWriter printWriter;
+	Date date = Calendar.getInstance().getTime();
+	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+	String strDate = dateFormat.format(date);
 
 	Scanner input = new Scanner(System.in);
 	DecimalFormat moneyFormat = new DecimalFormat("'$'###,##0.00");
@@ -26,7 +37,12 @@ public class Account {
 		this.checkingBalance = checkingBalance;
 		this.savingBalance = savingBalance;
 	}
+//Add the ability to show statement of all your account balances
+	public String getStatement(){
 
+		return "Your checking balance is: "+ getCheckingBalance()+"\n"
+				+"Your saving balance is: "+ getSavingBalance();
+	}
 	public int setCustomerNumber(int customerNumber) {
 		this.customerNumber = customerNumber;
 		return customerNumber;
@@ -83,7 +99,7 @@ public class Account {
 		checkingBalance = checkingBalance + amount;
 	}
 
-	public void getCheckingWithdrawInput() {
+	public void getCheckingWithdrawInput(PrintWriter log) {
 		boolean end = false;
 		while (!end) {
 			try {
@@ -93,6 +109,9 @@ public class Account {
 				if ((checkingBalance - amount) >= 0 && amount >= 0) {
 					calcCheckingWithdraw(amount);
 					System.out.println("\nCurrent Checkings Account Balance: " + moneyFormat.format(checkingBalance));
+					try {
+						log.println(""+strDate+" Account "+customerNumber+" has withdrawn $" + amount + " from Checking Account.");
+					} catch (Exception e){}
 					end = true;
 				} else {
 					System.out.println("\nBalance Cannot be Negative.");
@@ -104,8 +123,9 @@ public class Account {
 		}
 	}
 
-	public void getsavingWithdrawInput() {
+	public void getsavingWithdrawInput(PrintWriter log) {
 		boolean end = false;
+
 		while (!end) {
 			try {
 				System.out.println("\nCurrent Savings Account Balance: " + moneyFormat.format(savingBalance));
@@ -114,6 +134,10 @@ public class Account {
 				if ((savingBalance - amount) >= 0 && amount >= 0) {
 					calcSavingWithdraw(amount);
 					System.out.println("\nCurrent Savings Account Balance: " + moneyFormat.format(savingBalance));
+					try {
+						log.println(""+strDate+" Account "+customerNumber+" has withdrawn $" + amount + " from Savings Account.");
+					} catch (Exception e){}
+
 					end = true;
 				} else {
 					System.out.println("\nBalance Cannot Be Negative.");
@@ -125,7 +149,7 @@ public class Account {
 		}
 	}
 
-	public void getCheckingDepositInput() {
+	public void getCheckingDepositInput(PrintWriter log) {
 		boolean end = false;
 		while (!end) {
 			try {
@@ -135,6 +159,10 @@ public class Account {
 				if ((checkingBalance + amount) >= 0 && amount >= 0) {
 					calcCheckingDeposit(amount);
 					System.out.println("\nCurrent Checkings Account Balance: " + moneyFormat.format(checkingBalance));
+					try {
+						log.println(""+strDate+" Account "+customerNumber+" has deposit $" + amount + " from Checking Account.");
+					} catch (Exception e){}
+
 					end = true;
 				} else {
 					System.out.println("\nBalance Cannot Be Negative.");
@@ -146,7 +174,7 @@ public class Account {
 		}
 	}
 
-	public void getSavingDepositInput() {
+	public void getSavingDepositInput(PrintWriter log) {
 		boolean end = false;
 		while (!end) {
 			try {
@@ -157,6 +185,10 @@ public class Account {
 				if ((savingBalance + amount) >= 0 && amount >= 0) {
 					calcSavingDeposit(amount);
 					System.out.println("\nCurrent Savings Account Balance: " + moneyFormat.format(savingBalance));
+					try {
+						log.println(""+strDate+" Account "+customerNumber+" has deposit $" + amount + " from Saving Account.");
+					} catch (Exception e){}
+
 					end = true;
 				} else {
 					System.out.println("\nBalance Cannot Be Negative.");
@@ -168,7 +200,7 @@ public class Account {
 		}
 	}
 
-	public void getTransferInput(String accType) {
+	public void getTransferInput(String accType,PrintWriter log) {
 		boolean end = false;
 		while (!end) {
 			try {
@@ -188,6 +220,10 @@ public class Account {
 							System.out.println("\nCurrent Savings Account Balance: " + moneyFormat.format(savingBalance));
 							System.out.println(
 									"\nCurrent Checkings Account Balance: " + moneyFormat.format(checkingBalance));
+							try {
+								log.println(""+strDate+" Account "+customerNumber+" has transfer $" + amount + " from Checking Account.");
+							} catch (Exception e){}
+
 							end = true;
 						} else {
 							System.out.println("\nBalance Cannot Be Negative.");
